@@ -8,8 +8,9 @@ book_repo = BookRepository()
 
 class OrderService:
 
-    async def create_order(self, user_id: str, data: dict):
-        items = data["items"]
+    async def create_order(self, user_id: str, items: list):
+        if not items:
+            raise Exception("No items provided for order")
 
         order_items = []
         total_amount = 0

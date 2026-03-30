@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 from app.core.config import settings
 from app.db.mongo_client import connect_to_mongo, close_mongo_connection, get_database
@@ -48,6 +49,14 @@ async def seed_initial_data():
 
 
 app = FastAPI(title=settings.PROJECT_NAME)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vite dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.add_exception_handler(NotFoundException, not_found_exception_handler)
 app.add_exception_handler(BadRequestException, bad_request_exception_handler)
